@@ -200,14 +200,25 @@ window.onload = function() {
 materias.forEach(m => {
   m.addEventListener("click", function() {
 
-    if (!m.classList.contains("habilitada")) return;
-
-    m.classList.remove("habilitada");
-    m.classList.add("aprobada");
-
+  // Si ya está aprobada, la desmarcamos
+  if (m.classList.contains("aprobada")) {
+    m.classList.remove("aprobada");
+    m.classList.add("habilitada");
     guardarProgreso();
     verificarDesbloqueos();
-  });
+    return;
+  }
+
+  // Si no está habilitada, no hace nada
+  if (!m.classList.contains("habilitada")) return;
+
+  // Marcar como aprobada
+  m.classList.remove("habilitada");
+  m.classList.add("aprobada");
+
+  guardarProgreso();
+  verificarDesbloqueos();
+});
 });
 
 function guardarProgreso() {
