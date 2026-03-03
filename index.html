@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Malla Arquitectura</title>
+
+<style>
+:root {
+  --bloqueada: #e8e3f3;
+  --habilitada: #cfe7f5;
+  --aprobada: #bde5c8;
+  --texto: #444;
+  --subtexto: #777;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #faf8fc;
+  color: var(--texto);
+  padding: 40px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+h2 {
+  margin-top: 60px;
+}
+
+h3 {
+  margin-top: 30px;
+  font-weight: normal;
+  color: #666;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.materia {
+  background-color: var(--bloqueada);
+  padding: 15px;
+  border-radius: 15px;
+  transition: 0.3s;
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.materia.habilitada {
+  background-color: var(--habilitada);
+  opacity: 1;
+}
+
+.materia.aprobada {
+  background-color: var(--aprobada);
+  text-decoration: line-through;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+  opacity: 1;
+}
+
+.sub {
+  font-size: 0.85em;
+  color: var(--subtexto);
+  margin-top: 8px;
+}
+</style>
+</head>
+<body>
+
+<h1>Malla Arquitectura – Primer Ciclo</h1>
+
+<h2>Etapa Inicial – 1º Año</h2>
+<div class="grid">
+
+<div class="materia habilitada" id="proyrep">Proyecto y Representación</div>
+
+<div class="materia habilitada" id="acnat">Acondicionamiento Natural</div>
+
+<div class="materia habilitada" id="tecint">Tecnología Integrada</div>
+
+<div class="materia habilitada" id="iniciacion">Iniciación a la Arquitectura</div>
+
+<div class="materia habilitada" id="mate">Principios Matemáticos</div>
+
+<div class="materia habilitada" id="trans1">Transversal I – Sustentabilidad</div>
+
+</div>
+
+
+<h2>Etapa Desarrollo – 2º Año</h2>
+<div class="grid">
+
+<div class="materia" id="proy2" data-req="proyrep">Proyecto</div>
+
+<div class="materia" id="acai1" data-req="acnat,tecint">Acondicionamiento Artificial e Instalaciones I</div>
+
+<div class="materia" id="cons1" data-req="tecint">Construcción I</div>
+
+<div class="materia" id="est1" data-req="tecint">Estructuras I</div>
+
+<div class="materia" id="hist1" data-req="iniciacion">
+Historia I
+<div class="sub">
+Mundos Ilustrados: Historia de la cultura arquitectónica en la gestación de la modernidad
+</div>
+</div>
+
+<div class="materia" id="trans2" data-req="trans1">Transversal II – Representación</div>
+
+</div>
+
+
+<h2>3º Año</h2>
+<div class="grid">
+
+<div class="materia" id="edib" data-req="proy2">Proyecto Edilicio Básico</div>
+
+<div class="materia" id="urbab" data-req="proy2">Proyecto Urbano Básico</div>
+
+<div class="materia" id="ediav" data-req="edib">Proyecto Edilicio Avanzado</div>
+
+<div class="materia" id="urbav" data-req="urbab">Proyecto Urbano Avanzado</div>
+
+<div class="materia" id="acai2" data-req="acnat,tecint">Acondicionamiento Artificial e Instalaciones II</div>
+
+<div class="materia" id="cons2" data-req="cons1">Construcción II</div>
+
+<div class="materia" id="hist2" data-req="iniciacion">
+Historia II
+<div class="sub">
+Historia de la vivienda social en los siglos XX y XXI<br>
+Tema de la arquitectura reciente. Arquitectura en Exhibición
+</div>
+</div>
+
+<div class="materia" id="teoarq" data-req="iniciacion">
+Teoría de la Arquitectura
+<div class="sub">
+Problemas de la Arquitectura en la Contemporaneidad
+</div>
+</div>
+
+<div class="materia" id="teourb" data-req="iniciacion">
+Teoría del Urbanismo
+<div class="sub">
+Ciudad, Sociedad y Políticas Urbanas<br>
+Proyecto Urbano y Planificación
+</div>
+</div>
+
+<div class="materia" id="trans3" data-req="trans2">Transversal III – Obra</div>
+
+</div>
+
+
+<h2>4º Año</h2>
+<div class="grid">
+
+<div class="materia" id="proytema" data-req="proy2">Proyecto – Tema Específico</div>
+
+<div class="materia" id="cons3" data-req="cons2">Construcción III</div>
+
+<div class="materia" id="est2" data-req="est1">Estructuras II</div>
+
+<div class="materia" id="hist3" data-req="hist1">
+Historia III
+<div class="sub">
+Arquitectura moderna y reciente en América Latina<br>
+Pensamiento y Proyecto en Uruguay
+</div>
+</div>
+
+<div class="materia" id="trans4" data-req="trans2">Transversal IV – Patrimonio</div>
+
+<div class="materia" id="trans5" data-req="trans2">Transversal V – Vivienda</div>
+
+</div>
+
+
+<script>
+let materias = document.querySelectorAll(".materia");
+
+materias.forEach(m => {
+  m.addEventListener("click", function() {
+
+    if (!m.classList.contains("habilitada")) return;
+
+    m.classList.remove("habilitada");
+    m.classList.add("aprobada");
+
+    verificarDesbloqueos();
+  });
+});
+
+function verificarDesbloqueos() {
+  materias.forEach(m => {
+
+    let requisitos = m.getAttribute("data-req");
+
+    if (!requisitos) return;
+
+    let lista = requisitos.split(",");
+    let cumple = true;
+
+    lista.forEach(id => {
+      let req = document.getElementById(id.trim());
+      if (!req.classList.contains("aprobada")) {
+        cumple = false;
+      }
+    });
+
+    if (cumple && !m.classList.contains("aprobada")) {
+      m.classList.add("habilitada");
+    }
+  });
+}
+</script>
+
+</body>
+</html>
