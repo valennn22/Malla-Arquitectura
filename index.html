@@ -106,7 +106,7 @@ h3 {
 <div class="materia" id="hist1" data-req="iniciacion">
 Historia I
 <div class="sub">
-Mundos Ilustrados: Historia de la cultura arquitectónica en la gestación de la modernidad
+-Mundos Ilustrados: Historia de la cultura arquitectónica en la gestación de la modernidad
 </div>
 </div>
 
@@ -133,23 +133,23 @@ Mundos Ilustrados: Historia de la cultura arquitectónica en la gestación de la
 <div class="materia" id="hist2" data-req="iniciacion">
 Historia II
 <div class="sub">
-Historia de la vivienda social en los siglos XX y XXI<br>
-Tema de la arquitectura reciente. Arquitectura en Exhibición
+-Historia de la vivienda social en los siglos XX y XXI<br>
+-Tema de la arquitectura reciente. Arquitectura en Exhibición
 </div>
 </div>
 
 <div class="materia" id="teoarq" data-req="iniciacion">
 Teoría de la Arquitectura
 <div class="sub">
-Problemas de la Arquitectura en la Contemporaneidad
+-Problemas de la Arquitectura en la Contemporaneidad
 </div>
 </div>
 
 <div class="materia" id="teourb" data-req="iniciacion">
 Teoría del Urbanismo
 <div class="sub">
-Ciudad, Sociedad y Políticas Urbanas<br>
-Proyecto Urbano y Planificación
+-Ciudad, Sociedad y Políticas Urbanas<br>
+-Proyecto Urbano y Planificación
 </div>
 </div>
 
@@ -170,8 +170,8 @@ Proyecto Urbano y Planificación
 <div class="materia" id="hist3" data-req="hist1">
 Historia III
 <div class="sub">
-Arquitectura moderna y reciente en América Latina<br>
-Pensamiento y Proyecto en Uruguay
+-Arquitectura moderna y reciente en América Latina<br>
+-Pensamiento y Proyecto en Uruguay
 </div>
 </div>
 
@@ -185,6 +185,18 @@ Pensamiento y Proyecto en Uruguay
 <script>
 let materias = document.querySelectorAll(".materia");
 
+// Cargar progreso guardado
+window.onload = function() {
+  let guardadas = JSON.parse(localStorage.getItem("aprobadas")) || [];
+  guardadas.forEach(id => {
+    let materia = document.getElementById(id);
+    if (materia) {
+      materia.classList.add("aprobada");
+    }
+  });
+  verificarDesbloqueos();
+};
+
 materias.forEach(m => {
   m.addEventListener("click", function() {
 
@@ -193,15 +205,23 @@ materias.forEach(m => {
     m.classList.remove("habilitada");
     m.classList.add("aprobada");
 
+    guardarProgreso();
     verificarDesbloqueos();
   });
 });
+
+function guardarProgreso() {
+  let aprobadas = [];
+  document.querySelectorAll(".materia.aprobada").forEach(m => {
+    aprobadas.push(m.id);
+  });
+  localStorage.setItem("aprobadas", JSON.stringify(aprobadas));
+}
 
 function verificarDesbloqueos() {
   materias.forEach(m => {
 
     let requisitos = m.getAttribute("data-req");
-
     if (!requisitos) return;
 
     let lista = requisitos.split(",");
