@@ -245,9 +245,17 @@ function verificarDesbloqueos() {
       }
     });
 
-    if (cumple && !m.classList.contains("aprobada")) {
-      m.classList.add("habilitada");
+    if (cumple) {
+      if (!m.classList.contains("aprobada")) {
+        m.classList.add("habilitada");
+      }
+    } else {
+      m.classList.remove("habilitada");
+      if (!m.classList.contains("aprobada")) {
+        m.classList.remove("aprobada");
+      }
     }
+
   });
 }
 </script>
